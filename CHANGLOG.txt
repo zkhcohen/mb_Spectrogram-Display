@@ -1,0 +1,41 @@
+Update 1: Fixed scaling issues.
+
+Update 2: Added height-resizing.
+
+Update 3: Added support for mobile installations / updated installation instructions.
+
+Update 3.1: New instructions / troubleshooting tool to fix spectrogram when it fails to appear (incorrect ffmpeg.exe path).
+
+Update 4: Fixed percent and quotation symbols causing incorrect filenames. Added support for songs with identical filenames.
+
+Update 5: Added a configuration panel which allows you to take advantage of all the ffmpeg 'showspectrumpic' switches. Added the ability to clear files on each restart of the add-in. Updated installation instructions due to (new) built-in debugging.
+
+Update 5.1: Updated names of programs, structure of files, fixed support for mobile installations, debugging message, Readme and other back-end improvements.
+
+Update 5.2: Added ability to set your own path to Ffmpeg. Removed unnecessary files. Many back-end improvements.
+
+Update 5.3: Additional improvements including debugging and previously-set Ffmpeg path populating Config. Panel automatically.
+
+Update 5.4: Streams no longer cause Ffmpeg to hang. Ability to prevent the header (title bar) from being shown by manually creating a text file called "noheader.txt" in the Dependencies folder (USE AT YOUR OWN RISK).
+
+Update 5.5: Configuration panel now integrated with MusicBee. Debug logging to "MBSpectrogramLog.txt" in Dependencies folder (cleared on restart). Other general improvements.
+
+Update 5.6: Attempt to fix stream image generation bug. Code optimizations.
+
+Update 5.7: Fixed stream image generated bug. Fixed track seeking when frequency legend is enabled.
+
+Update 5.8: Debugging Mode made optional. Fixed MusicBee error log spam. Code optimizations. Updated README.
+
+Update 5.9: Fixed identical tracks with different file-types preventing unique image from being generated. Added ability to set Placeholder image for streams (place "placeholder.png" in the Dependencies folder). Switched to Zerandoe FFMPEG build so that the Magma color scheme works.
+
+Update 6: Spectrogram now always shows the full frequency spectrum of the track, regardless of the size of the panel. This works by finding the closest resolution (multiple of 2) and then stretching the image to fit the panel. This also means that substantially fewer images will be generated, and accidental/minor resizes won't trigger new image generation (it will use the best-fit).
+
+Update 6.1: You can now access the Spectrogram Configuration Panel by right-clicking the panel. Bug fixes. More efficient image generation / resolution matching.
+
+Update 6.2: Fixed prompt. Change defaults to the popular configuration. Removed right-click configuration menu -> moved the the header drop-down menu.
+
+Update 7: Added two experimental features to the Configuration Panel - Enable Seekbar and Disable Header. Added ability to pause/play by right-clicking the Spectrogram.
+
+Update 7.1: Added dynamic indicator (tooltip) of time in song. Fixed version.
+
+Update 7.2: Attempt at fixing multi-threading crash and tooltip issues. Changed cursor type.

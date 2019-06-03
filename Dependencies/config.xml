@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ConfigMgr xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ColorScheme>intensity</ColorScheme>
+  <Saturation>1</Saturation>
+  <Gain>1</Gain>
+  <WindowFunction>hann</WindowFunction>
+  <ChannelMode>combined</ChannelMode>
+  <Scale>log</Scale>
+  <ClearImages>false</ClearImages>
+  <ShowLegend>true</ShowLegend>
+</ConfigMgr>
