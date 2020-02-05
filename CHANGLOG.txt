@@ -39,3 +39,5 @@ Update 7: Added two experimental features to the Configuration Panel - Enable Se
 Update 7.1: Added dynamic indicator (tooltip) of time in song. Fixed version.
 
 Update 7.2: Attempt at fixing multi-threading crash and tooltip issues. Changed cursor type.
+
+Update 7.3: Fixed an issue which caused a System.OverflowException when listening to radio streams for extended periods with the seekbar enabled.
