@@ -664,17 +664,9 @@ namespace MusicBeePlugin
 
                         float currentCompletion = (currentPos / totalTime) * (totalLength - (_seekMin * 2));
 
-                        try
-                        {
-                            int width = Convert.ToInt32(currentCompletion);
-                            Rectangle rect = new Rectangle(_seekMin, panel.Height - 10, width, 10);
-                            myGraphics.FillRectangle(blackFill, rect);
-
-                        }
-                        catch (System.OverflowException)
-                        {
-                            LogMessageToFile("Int32 Conversion Overflow.");
-                        }
+                        Int32.TryParse(currentCompletion.ToString(), out int width);
+                        Rectangle rect = new Rectangle(_seekMin, panel.Height - 10, width, 10);
+                        myGraphics.FillRectangle(blackFill, rect);
 
                         blackFill.Dispose();
                         myGraphics.Dispose();
