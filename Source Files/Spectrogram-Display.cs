@@ -664,8 +664,7 @@ namespace MusicBeePlugin
 
                         float currentCompletion = (currentPos / totalTime) * (totalLength - (_seekMin * 2));
 
-                        Int32.TryParse(currentCompletion.ToString(), out int width);
-                        Rectangle rect = new Rectangle(_seekMin, panel.Height - 10, width, 10);
+                        Rectangle rect = new Rectangle(_seekMin, panel.Height - 10, (int)currentCompletion, 10);
                         myGraphics.FillRectangle(blackFill, rect);
 
                         blackFill.Dispose();
