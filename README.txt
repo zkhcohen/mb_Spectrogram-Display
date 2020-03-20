@@ -1,6 +1,6 @@
-MusicBee Spectrogram 1.7 README:
+MusicBee Spectrogram 1.7.4 README:
 
-Tested on MusicBee 3.3.7035
+Tested on MusicBee 3.3.7367
 
 
 
