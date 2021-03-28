@@ -184,9 +184,8 @@ namespace MusicBeePlugin
             var ShowLegend = (deseralizedObject.ShowLegend) ? "enabled" : "disabled";
 
             int setWidth = (ShowLegend == "enabled") ? (_spectWidth - 282) :  _spectWidth;
-            int setHeight = (ShowLegend == "enabled") ? (_spectHeight - 128) : _spectHeight;
 
-            var arguments = (@"-i " + trackInput + " -lavfi showspectrumpic=s=" + setWidth + "x" + setHeight + ":"
+            var arguments = (@"-i " + trackInput + " -lavfi showspectrumpic=s=" + setWidth + "x" + _spectHeight + ":"
                              + ChannelMode + ":legend=" + ShowLegend + ":saturation=" + Saturation +
                             ":color=" + ColorScheme + ":scale=" + Scale + ":win_func=" + WindowFunction +
                             ":gain=" + Gain + " " + @"""" + _imageDirectory + titleInput + _hash + @"""" + ".png");

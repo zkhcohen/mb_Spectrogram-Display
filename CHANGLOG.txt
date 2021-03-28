@@ -44,4 +44,4 @@ Update 7.3: Fixed an issue which caused a System.OverflowException when listenin
 
 Update 7.4: Re-fixed the issue using a Bind.
 
-Update 7.5: Now using file hashes to name images. Creating rounding to reduce the number of images created. Fixed scaling on images.
+Update 7.5: Now using file hashes to name images. Created rounding to reduce the number of images created. Fixed scaling on images.
