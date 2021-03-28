@@ -45,6 +45,8 @@ namespace MusicBeePlugin
 
         public static string _hash { get; private set; }
 
+        public static string _fileHash { get; private set; }
+
         public static string _imageDirectory { get; private set; }
 
         public static bool _legend { get; private set; }
@@ -52,6 +54,8 @@ namespace MusicBeePlugin
         public static string _path { get; private set; }
 
         public static int _spectHeight { get; private set; }
+
+        public static int _spectWidth { get; private set; }
 
         public static string _workingDirectory { get; private set; }
 
@@ -74,6 +78,11 @@ namespace MusicBeePlugin
                 powOfTwo = powOfTwo << 1;
             }
             return powOfTwo;
+        }
+
+        public static int RoundToTen(int i)
+        {
+            return ((int)Math.Round(i / 10.0)) * 10;
         }
 
         // Find Closest Power of Two to Determine Appropriate Height of Spectrogram
@@ -120,7 +129,19 @@ namespace MusicBeePlugin
             }
         }
 
-        // The duration of the current track. Used to make unique file-names and to determine if the file is a stream.
+        public void CreateFileHash()
+        {
+            using (var md5 = MD5.Create())
+            {
+                using (var stream = File.OpenRead(mbApiInterface.NowPlaying_GetFileUrl()))
+                {
+                    var temp = md5.ComputeHash(stream);
+                    _fileHash = BitConverter.ToString(temp).Replace("-", "").ToLowerInvariant();
+                }
+            }
+        }
+
+        // The duration of the current track. Used to determine if the file is a stream.
         public void CurrentDuration()
         {
             _duration = mbApiInterface.NowPlaying_GetDuration();
@@ -131,20 +152,14 @@ namespace MusicBeePlugin
         // The title of the current song, stripped down to the characters which can be used in a file-name.
         public string CurrentTitle()
         {
-
+            CreateFileHash();
             _spectHeight = RoundToNextPowerOfTwo(panel.Height);
-
-            var rawTitle = mbApiInterface.NowPlaying_GetFileTag(MetaDataType.TrackTitle) + "-" +
-                       mbApiInterface.NowPlaying_GetFileTag(MetaDataType.Artist) + "-" +
-                       mbApiInterface.NowPlaying_GetFileProperty(FilePropertyType.Kind) + "-" +
-                       panel.Width + "-" + _spectHeight;
+            _spectWidth = RoundToTen(panel.Width);
+            string processedTitle = _fileHash + _spectHeight + _spectWidth;
+            
 
 
-            var processedTitle = Regex.Replace(rawTitle, @"[ / : * % ? < > | ! ]", "");
-            processedTitle = processedTitle.Replace("\"", "");
-
-
-            LogMessageToFile("Raw Title: " + rawTitle + " ////// Processed Title: " + processedTitle);
+            LogMessageToFile("Title: " + processedTitle);
 
             return processedTitle;
         }
@@ -168,10 +183,13 @@ namespace MusicBeePlugin
             var Scale = deseralizedObject.Scale;
             var ShowLegend = (deseralizedObject.ShowLegend) ? "enabled" : "disabled";
 
-            var arguments = (@"-i " + trackInput + " -lavfi showspectrumpic=s=" + panel.Width + "x" + _spectHeight + ":"
+            int setWidth = (ShowLegend == "enabled") ? (_spectWidth - 282) :  _spectWidth;
+            int setHeight = (ShowLegend == "enabled") ? (_spectHeight - 128) : _spectHeight;
+
+            var arguments = (@"-i " + trackInput + " -lavfi showspectrumpic=s=" + setWidth + "x" + setHeight + ":"
                              + ChannelMode + ":legend=" + ShowLegend + ":saturation=" + Saturation +
                             ":color=" + ColorScheme + ":scale=" + Scale + ":win_func=" + WindowFunction +
-                            ":gain=" + Gain + " " + @"""" + _imageDirectory + titleInput + _duration + _hash + @"""" + ".png");
+                            ":gain=" + Gain + " " + @"""" + _imageDirectory + titleInput + _hash + @"""" + ".png");
 
             LogMessageToFile("FFMPEG Arguments: " + arguments);
 
@@ -218,7 +236,7 @@ namespace MusicBeePlugin
         public void ImgCheck()
         {
             LogMessageToFile("Get file path.");
-            _path = _imageDirectory + CurrentTitle() + _duration + _hash + ".png";
+            _path = _imageDirectory + CurrentTitle() + _hash + ".png";
         }
 
         // Initialization
@@ -282,11 +300,11 @@ namespace MusicBeePlugin
             about.PluginInfoVersion = PluginInfoVersion;
             about.Name = "Spectrogram-Display";
             about.Description = "This plugin displays the spectrogram of the song being played.";
-            about.Author = "Zachary Cohen";
+            about.Author = "zkhcohen";
             about.Type = PluginType.PanelView;
             about.VersionMajor = 1;
             about.VersionMinor = 7;
-            about.Revision = 2;
+            about.Revision = 5;
             about.MinInterfaceVersion = MinInterfaceVersion;
             about.MinApiRevision = MinApiRevision;
             about.ReceiveNotifications = ReceiveNotificationFlags.PlayerEvents | ReceiveNotificationFlags.TagEvents;
@@ -393,7 +411,7 @@ namespace MusicBeePlugin
 
                         if (_legend == true)
                         {
-                            _seekMin = 100;
+                            _seekMin = 141;
                         }
                         else
                         {
@@ -529,8 +547,8 @@ namespace MusicBeePlugin
                     if (_legend)
                     {
                         SolidBrush blackFill = new SolidBrush(Color.Black);
-                        Rectangle rectLeft = new Rectangle(0, panel.Height - 10, 100, 10);
-                        Rectangle rectRight = new Rectangle(panel.Width - 100, panel.Height - 10, 100, 10);
+                        Rectangle rectLeft = new Rectangle(0, panel.Height - 10, 141, 10);
+                        Rectangle rectRight = new Rectangle(panel.Width - 141, panel.Height - 10, 141, 10);
 
                         e.Graphics.FillRectangle(blackFill, rectLeft);
                         e.Graphics.FillRectangle(blackFill, rectRight);
@@ -559,7 +577,7 @@ namespace MusicBeePlugin
 
                     LogMessageToFile("Image found.");
                     var image = Image.FromFile(Placeholder, true);
-                    image = new Bitmap(image, new Size(panel.Width, _spectHeight));
+                    image = new Bitmap(image, new Size(_spectWidth, _spectHeight));
                     e.Graphics.DrawImage(image, new Point(0, 0));
 
 
@@ -586,15 +604,15 @@ namespace MusicBeePlugin
             {
 
 
-                if ((currentPosX >= 100 && currentPosX <= (totalLength - 100)))
+                if ((currentPosX >= 141 && currentPosX <= (totalLength - 141)))
                 {
                     float adjustedLength = totalLength - 200;
-                    getRelativeLocation = ((currentPosX - 100) / adjustedLength) * totalTime;
+                    getRelativeLocation = ((currentPosX - 141) / adjustedLength) * totalTime;
 
                     return getRelativeLocation;
 
                 }
-                else if (currentPosX < 100)
+                else if (currentPosX < 141)
                 {
 
                     return 0;
