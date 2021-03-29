@@ -401,41 +401,49 @@ namespace MusicBeePlugin
                     LogMessageToFile("\n\n\n Track changed.");
 
                     CurrentDuration();
-                    ImgCheck();
 
                     _lastPos = 0;
 
-                    // Set Seekbar Display
-                    if (File.Exists(_workingDirectory + @"\seekbar.txt"))
+                    if (_duration > 0)
                     {
-                        _seekbar = true;
+                        ImgCheck();
 
-                        if (_legend == true)
+                        // Set Seekbar Display
+                        if (File.Exists(_workingDirectory + @"\seekbar.txt"))
                         {
-                            _seekMin = _spectBuffer;
+                            _seekbar = true;
+
+                            if (_legend == true)
+                            {
+                                _seekMin = _spectBuffer;
+                            }
+                            else
+                            {
+                                _seekMin = 0;
+                            }
+
+                            initTimer();
                         }
                         else
                         {
-                            _seekMin = 0;
+                            _seekbar = false;
                         }
 
-                        initTimer();
+                        //LogMessageToFile("Size: " + mbApiInterface.NowPlaying_GetFileProperty(FilePropertyType.Size));
+
+                        // If the Spectrogram Image for the Song that Just Started Playing Doesn't Exist, Create One (if it's not a stream: size "N/A").
+                        if (!File.Exists(_path))
+                        {
+
+                            LogMessageToFile("Path: " + _path);
+                            LogMessageToFile("Beginning generation of image.");
+                            RunCmd();
+
+                        }
                     }
-                    else
+                    else 
                     {
-                        _seekbar = false;
-                    }
-
-                    //LogMessageToFile("Size: " + mbApiInterface.NowPlaying_GetFileProperty(FilePropertyType.Size));
-
-                    // If the Spectrogram Image for the Song that Just Started Playing Doesn't Exist, Create One (if it's not a stream: size "N/A").
-                    if (_duration > 0 && !File.Exists(_path))
-                    {
-
-                        LogMessageToFile("Path: " + _path);
-                        LogMessageToFile("Beginning generation of image.");
-                        RunCmd();
-
+                        _path = null;
                     }
 
                     // Refresh the Panel.
