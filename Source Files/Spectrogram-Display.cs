@@ -57,6 +57,8 @@ namespace MusicBeePlugin
 
         public static int _spectWidth { get; private set; }
 
+        public static int _spectBuffer { get; private set; }
+
         public static string _workingDirectory { get; private set; }
 
         #endregion
@@ -155,6 +157,8 @@ namespace MusicBeePlugin
             CreateFileHash();
             _spectHeight = RoundToNextPowerOfTwo(panel.Height);
             _spectWidth = RoundToTen(panel.Width);
+            var buffer = 141 * ((decimal)_spectWidth / (_spectWidth + 282));
+            _spectBuffer = (int)buffer;
             string processedTitle = _fileHash + _spectHeight + _spectWidth;
             
 
@@ -183,9 +187,7 @@ namespace MusicBeePlugin
             var Scale = deseralizedObject.Scale;
             var ShowLegend = (deseralizedObject.ShowLegend) ? "enabled" : "disabled";
 
-            int setWidth = (ShowLegend == "enabled") ? (_spectWidth - 282) :  _spectWidth;
-
-            var arguments = (@"-i " + trackInput + " -lavfi showspectrumpic=s=" + setWidth + "x" + _spectHeight + ":"
+            var arguments = (@"-i " + trackInput + " -lavfi showspectrumpic=s=" + _spectWidth + "x" + _spectHeight + ":"
                              + ChannelMode + ":legend=" + ShowLegend + ":saturation=" + Saturation +
                             ":color=" + ColorScheme + ":scale=" + Scale + ":win_func=" + WindowFunction +
                             ":gain=" + Gain + " " + @"""" + _imageDirectory + titleInput + _hash + @"""" + ".png");
@@ -410,7 +412,7 @@ namespace MusicBeePlugin
 
                         if (_legend == true)
                         {
-                            _seekMin = 141;
+                            _seekMin = _spectBuffer;
                         }
                         else
                         {
@@ -546,8 +548,8 @@ namespace MusicBeePlugin
                     if (_legend)
                     {
                         SolidBrush blackFill = new SolidBrush(Color.Black);
-                        Rectangle rectLeft = new Rectangle(0, panel.Height - 10, 141, 10);
-                        Rectangle rectRight = new Rectangle(panel.Width - 141, panel.Height - 10, 141, 10);
+                        Rectangle rectLeft = new Rectangle(0, panel.Height - 10, _spectBuffer, 10);
+                        Rectangle rectRight = new Rectangle(panel.Width - _spectBuffer, panel.Height - 10, _spectBuffer, 10);
 
                         e.Graphics.FillRectangle(blackFill, rectLeft);
                         e.Graphics.FillRectangle(blackFill, rectRight);
@@ -603,15 +605,15 @@ namespace MusicBeePlugin
             {
 
 
-                if ((currentPosX >= 141 && currentPosX <= (totalLength - 141)))
+                if ((currentPosX >= _spectBuffer && currentPosX <= (totalLength - _spectBuffer)))
                 {
                     float adjustedLength = totalLength - 200;
-                    getRelativeLocation = ((currentPosX - 141) / adjustedLength) * totalTime;
+                    getRelativeLocation = ((currentPosX - _spectBuffer) / adjustedLength) * totalTime;
 
                     return getRelativeLocation;
 
                 }
-                else if (currentPosX < 141)
+                else if (currentPosX < _spectBuffer)
                 {
 
                     return 0;
