@@ -304,8 +304,8 @@ namespace MusicBeePlugin
             about.Author = "zkhcohen";
             about.Type = PluginType.PanelView;
             about.VersionMajor = 1;
-            about.VersionMinor = 7;
-            about.Revision = 5;
+            about.VersionMinor = 8;
+            about.Revision = 0;
             about.MinInterfaceVersion = MinInterfaceVersion;
             about.MinApiRevision = MinApiRevision;
             about.ReceiveNotifications = ReceiveNotificationFlags.PlayerEvents | ReceiveNotificationFlags.TagEvents;
@@ -586,7 +586,7 @@ namespace MusicBeePlugin
 
                     LogMessageToFile("Image found.");
                     var image = Image.FromFile(Placeholder, true);
-                    image = new Bitmap(image, new Size(_spectWidth, _spectHeight));
+                    image = new Bitmap(image, new Size(panel.Width, panel.Height));
                     e.Graphics.DrawImage(image, new Point(0, 0));
 
 

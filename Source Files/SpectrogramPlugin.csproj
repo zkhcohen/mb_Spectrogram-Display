@@ -133,7 +133,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /Y "C:\Users\zacha\Desktop\Local Files\MusicBee Plugin Development\DEVELOPMENT\mb_Spectrogram-Display\Source Files\bin\Release\mb_Spectrogram-Display.dll" "C:\Users\zacha\Desktop\Local Files\MusicBee\Plugins\mb_Spectrogram-Display.dll"</PostBuildEvent>
+    <PostBuildEvent>copy /Y "C:\Users\zacha\Desktop\Local Files\MusicBee Plugin Development\DEVELOPMENT\mb_Spectrogram-Display\Source Files\bin\Release\mb_Spectrogram-Display.dll" "C:\Users\zacha\Desktop\Local Files\MusicBee\Plugins\mb_Spectrogram-Display.dll"
+copy /Y "C:\Users\zacha\Desktop\Local Files\MusicBee Plugin Development\DEVELOPMENT\mb_Spectrogram-Display\Source Files\bin\Release\mb_Spectrogram-Display.dll" "C:\Users\zacha\Desktop\Local Files\MusicBee Plugin Development\DEVELOPMENT\mb_Spectrogram-Display\Plugins\mb_Spectrogram-Display.dll"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
