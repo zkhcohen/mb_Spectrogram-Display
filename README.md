@@ -1,3 +1,5 @@
+# The code in this is written _very poorly._ I wrote this _years_ ago. Since I don't have the time to refactor this repo, I'm archiving it.
+
 MusicBee Spectrogram 1.7.5 README:
 
 Tested on MusicBee 3.4.7755 P
